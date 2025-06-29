@@ -8,7 +8,7 @@ for line in sys.stdin:
 
     # Skip lines that do not have exactly 6 columns
     if len(data) != 6:
-        continue
+        raise ValueError(f"Invalid input line (expected 6 columns): {line}")
 
     date, time, item, category, sales, payment = data
 
