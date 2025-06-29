@@ -24,38 +24,28 @@ sum_of_values = 0
 
 # Previous key is initialized with None, we just started
 previous_key = None
+#!/usr/bin/env python
 
-# For each new line in the standard input 
+import sys
+
+previous_key = None
+count = 0
+
 for line in sys.stdin:
-
-    # split the line at the tabulator ("\t")
-    # strip removes whitespaces and new lines at the beginning and end of the line
-    # The result is a tuple with 2 elements
     data = line.strip().split("\t")
+    if len(data) != 2:
+        continue
 
-    # Store the 2 elements of this line in seperate variables
     key, value = data
 
-    # Do we have a previous_key (previous_key != None) and 
-    # is the new key different than the previous key?
-    # This means the line starts with a new key (key changes e.g. from "Visa" to "Cash")
-    # Remember that our keys are sorted
-    if previous_key != None and previous_key != key:
-        # Then write the result of the old key (Key=category, Value= Sum of Sales)
-        # to the standart output (stdout)
-        # Key and value are seperated by a tab (\t)
-        # Line ends with new line (\n)
-        sys.stdout.write("{0}\t{1}\n".format(previous_key, sum_of_values))
-        # Sum of sales starts again with 0
-        sum_of_values = 0
+    if previous_key is not None and previous_key != key:
+        sys.stdout.write("{0}\t{1}\n".format(previous_key, count))
+        count = 0
 
-    # Add the value to the total sales
-    # a += b is the same as a = a + b
-    # the float function transforms the value
-    # to a float data type (like decimal)
-    sum_of_values += float(value)
-    # the previous key for the next iteration is the current key of the this iteration 
+    count += 1
     previous_key = key
 
-# write the last result to stdout
-sys.stdout.write("{0}\t{1}\n".format(previous_key, sum_of_values))
+# Write the final key
+if previous_key is not None:
+    sys.stdout.write("{0}\t{1}\n".format(previous_key, count))
+
