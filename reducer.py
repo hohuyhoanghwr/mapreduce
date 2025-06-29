@@ -3,6 +3,7 @@
 import sys
 
 previous_key = None
+sum_sales = 0.0
 count = 0
 
 for line in sys.stdin:
@@ -12,15 +13,22 @@ for line in sys.stdin:
 
     key, value = data
 
+    try:
+	sale = float(value)
+    except ValueError:
+	continue
+
     if previous_key is not None and previous_key != key:
-        if count > 114:
-            sys.stdout.write("{0}\t{1}\n".format(previous_key, count))
+	average = sum_sales / count if count != 0 else 0
+        sys.stdout.write("{0}\t{1:.2f}\n".format(previous_key, average))
+        sum_sales = 0.0
         count = 0
 
+    sum_sales += sale
     count += 1
     previous_key = key
 
-# Handle the last key
-if previous_key is not None and count > 114:
-    sys.stdout.write("{0}\t{1}\n".format(previous_key, count))
-
+# Final category
+if previous_key is not None and count != 0:
+    average = sum_sales / count
+    sys.stdout.write("{0}\t{1:.2f}\n".format(previous_key, average))
